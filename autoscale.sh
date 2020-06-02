@@ -40,7 +40,8 @@ while true; do
 
     if [[ $? -eq 0 ]]; then
       queueMessages=$(echo $queueMessagesJson | jq '.messages')
-      requiredPods=$(echo "$queueMessages/$mesgPerPod" | bc 2> /dev/null)
+      # rounds up
+      requiredPods=$(echo "($queueMessages + $mesgPerPod -1)/$mesgPerPod" | bc 2> /dev/null)
 
       if [[ $requiredPods != "" ]]; then
         currentPods=$(getCurrentPods)
